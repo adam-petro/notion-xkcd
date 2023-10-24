@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily XKCD</title>
+  </head>
+
+  <body>
+    <div id="content">
+      <img src="" alt="Loading" />
+    </div>
+    <div id="testdiv">
+      <p>asdjaklsda</p>
+      <div id="testdiv3">
+        <p>asdjaklsda</p>
+      </div>
+    </div>
+    <div id="testdiv2">
+      <p>asdjaklsda</p>
+    </div>
+    <script>
+      const setImage = () => {
+        let image = document.querySelector("img");
+        let url = "https://xkcd.now.sh/?comic=latest";
+        fetch(url, {
+          method: "GET",
+          mode: "cors",
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            let comicUrl = json.img;
+            let comicNumber = json.num;
+            image.src = comicUrl;
+          })
+          .catch(function (err) {
+            console.error("Something went wrong in fetching the image:", err);
+            image.alt = "Something's broken";
+          });
+      };
+
+      const removeAllDivsExceptTheImageOne = () => {
+        var divs = document.querySelectorAll("div");
+        divs.forEach((div) => {
+          if (div.id != "content") {
+            div.style.display = "none";
+          }
+        });
+      };
+
+      setImage();
+      removeAllDivsExceptTheImageOne();
+    </script>
+  </body>
+</html>
