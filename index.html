@@ -6,9 +6,15 @@
     <title>Daily XKCD</title>
   </head>
 
-  <body>
+  <body onload="getAndSetImage('latest')">
     <div id="content">
+      <div class="btn-container">
+        <button type="button" id="previous" class="btn">&lt;</button>
+      </div>
       <img src="" alt="Loading" />
+      <div class="btn-container">
+        <button type="button" id="next" class="btn">&gt;</button>
+      </div>
     </div>
   </body>
   <style>
@@ -24,9 +30,33 @@
     #content {
       width: 100%;
       height: 100%;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .btn {
+      position: absolute;
+      top: 50%;
+      outline: none;
+      border: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      border-radius: 12px;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      opacity: 0 ;
+      transition: opacity 0.5s ease;
+    }
+
+    #content:hover .btn {
+      opacity: 1;
+    }
+
+    #next {
+      right: 0;
     }
 
     #content img {
@@ -37,24 +67,51 @@
     }
   </style>
   <script>
-    const setImage = () => {
+    let baseUrl = "https://xkcd.now.sh/?comic=";
+    let newestComicNumber = 0;
+    let comicNumber = 0;
+    let loading = false;
+
+    let previousButton = document.querySelector("#previous");
+    let nextButton = document.querySelector("#next");
+
+    previousButton.addEventListener("click", () => {
+      if (comicNumber > 1) {
+        getAndSetImage(comicNumber - 1);
+      }
+    });
+
+    nextButton.addEventListener("click", () => {
+      if (comicNumber < newestComicNumber) {
+        getAndSetImage(comicNumber + 1);
+      }
+    });
+
+    const setImageFromJson = (json) => {
       let image = document.querySelector("img");
-      let url = "https://xkcd.now.sh/?comic=latest";
+      let comicUrl = json.img;
+      image.src = comicUrl;
+    };
+
+    const getAndSetImage = (imageNumber) => {
+      let url = `https://xkcd.now.sh/?comic=${imageNumber}`;
+      loading = true;
       fetch(url, {
         method: "GET",
         mode: "cors",
       })
         .then((response) => response.json())
         .then((json) => {
-          let comicUrl = json.img;
-          let comicNumber = json.num;
-          image.src = comicUrl;
+          setImageFromJson(json);
+          if (comicNumber > newestComicNumber) {
+            newestComicNumber = comicNumber;
+          }
+          comicNumber = json.num;
         })
         .catch(function (err) {
           console.error("Something went wrong in fetching the image:", err);
           image.alt = "Something's broken";
         });
     };
-    setImage();
   </script>
 </html>
