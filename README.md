@@ -11,5 +11,5 @@ Due to the [same-origin](https://developer.mozilla.org/en-US/docs/Web/Security/S
 
 1. Go to the page in your Notion where you'd like the widget to be embedded.
 2. Enter the `/embed` command.
-3. Paste in the URL of the hosted website, i.e. `https://notion-xkcd.pages.dev`. ![Screenshot 2023-10-29 at 16 01 55](https://github.com/adam-petro/notion-xkcd/assets/36929874/fd7a9ae3-9212-4692-92f9-5f6401448cbc)
+3. Paste in the URL of the hosted website, i.e. `https://notion-xkcd.pages.dev`.
 4. Profit.
